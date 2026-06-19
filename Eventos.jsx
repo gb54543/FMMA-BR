@@ -94,4 +94,23 @@ export default function Events() {
                             <Calendar className="w-3 h-3" />
                             {new Date(event.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }).toUpperCase()}
                           </span>
- 
+                        )}
+                        {event.venue && (
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            {event.venue.toUpperCase()}{event.city ? `, ${event.city.toUpperCase()}` : ""}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
