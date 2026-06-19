@@ -94,4 +94,41 @@ export default function EventDetail() {
             <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-2xl">{event.description}</p>
           )}
         </div>
- 
+      </div>
+
+      {/* Fight Card */}
+      {fights.length > 0 ? (
+        <div>
+          {mainCard.length > 0 && (
+            <div className="mb-8">
+              <h2 className="font-heading text-2xl tracking-wide mb-4 flex items-center gap-2">
+                <Swords className="w-6 h-6 text-primary" /> MAIN CARD
+              </h2>
+              <div className="space-y-4">
+                {mainCard.map(fight => (
+                  <FightCard key={fight.id} fight={fight} fighters={fighters} />
+                ))}
+              </div>
+            </div>
+          )}
+          {undercard.length > 0 && (
+            <div>
+              <h2 className="font-heading text-2xl tracking-wide mb-4 text-muted-foreground">PRELIMS</h2>
+              <div className="space-y-3">
+                {undercard.map(fight => (
+                  <FightCard key={fight.id} fight={fight} fighters={fighters} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="text-center py-16 bg-card border border-border rounded-xl">
+          <Swords className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+          <p className="font-heading text-xl text-muted-foreground">FIGHT CARD TBD</p>
+          <p className="text-sm text-muted-foreground mt-1">Matchups will be announced soon.</p>
+        </div>
+      )}
+    </div>
+  );
+}
