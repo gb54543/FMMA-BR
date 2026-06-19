@@ -94,4 +94,96 @@ export default function FighterProfile() {
             </div>
 
             {fighter.nickname && (
- 
+              <p className="font-display text-sm tracking-wider text-primary">"{fighter.nickname.toUpperCase()}"</p>
+            )}
+            <h1 className="font-heading text-5xl sm:text-6xl tracking-wide text-foreground mt-1">
+              {fighter.name?.toUpperCase()}
+            </h1>
+
+            {/* Medidas físicas */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+              {[
+                { icon: Ruler, label: "ALTURA", value: fighter.height_cm ? `${fighter.height_cm} m` : "—" },
+                { icon: Weight, label: "PESO", value: fighter.weight_kg ? `${fighter.weight_kg} kg` : "—" },
+                { icon: Target, label: "ENVERGADURA", value: fighter.reach_cm ? `${fighter.reach_cm} cm` : "—" },
+                { icon: Flame, label: "IDADE", value: fighter.age || "—" },
+              ].map(stat => (
+                <div key={stat.label} className="bg-muted/50 rounded-lg p-3 text-center">
+                  <stat.icon className="w-4 h-4 text-primary mx-auto mb-1" />
+                  <p className="font-heading text-xl text-foreground">{stat.value}</p>
+                  <p className="text-xs font-display tracking-wider text-muted-foreground">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Info + Histórico */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+        {/* Fighter Info */}
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="font-heading text-xl tracking-wide mb-6 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-primary" />
+            INFORMAÇÕES
+          </h3>
+          <div className="space-y-4">
+            {[
+              { label: "ESTILO DE LUTA", value: fighter.fighting_style },
+              { label: "ACADEMIA", value: fighter.gym },
+              { label: "NACIONALIDADE", value: fighter.nationality },
+              { label: "DIVISÃO", value: getWeightClassName(fighter.weight_class) },
+            ].filter(item => item.value).map(item => (
+              <div key={item.label} className="flex justify-between items-center py-2 border-b border-border/50 last:border-0">
+                <span className="text-xs font-display tracking-wider text-muted-foreground">{item.label}</span>
+                <span className="text-sm font-display tracking-wider text-foreground">{item.value}</span>
+              </div>
+            ))}
+          </div>
+          {fighter.bio && (
+            <div className="mt-6">
+              <p className="text-xs font-display tracking-wider text-muted-foreground mb-2">BIO</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{fighter.bio}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Histórico de lutas */}
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="font-heading text-xl tracking-wide mb-6 flex items-center gap-2">
+            <Swords className="w-5 h-5 text-primary" />
+            HISTÓRICO DE LUTAS ({fights.length})
+          </h3>
+          {fights.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">Nenhuma luta registrada ainda.</p>
+          ) : (
+            <div className="space-y-3">
+              {fights.slice(0, 10).map(fight => {
+                const won = fight.winner_id === fighter.id;
+                const opponentName = fight.fighter1_id === fighter.id ? fight.fighter2_name : fight.fighter1_name;
+                return (
+                  <div key={fight.id} className={`p-3 rounded-lg border ${won ? "border-green-500/20 bg-green-500/5" : "border-red-500/20 bg-red-500/5"}`}>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-heading text-sm tracking-wide">
+                          vs {opponentName?.toUpperCase() || "DESCONHECIDO"}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{fight.method}</p>
+                      </div>
+                      <Badge className={`${won ? "bg-green-600/20 text-green-500" : "bg-red-600/20 text-red-500"} font-display text-xs`}>
+                        {won ? "VITÓRIA" : "DERROTA"}
+                      </Badge>
+                    </div>
+                    {fight.round && (
+                      <p className="text-xs text-muted-foreground mt-1">Round {fight.round} {fight.time && `• ${fight.time}`}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
